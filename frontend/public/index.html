@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Judge v6 — Intelligent Evaluation System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&family=Syne:wght@800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body>
+  <!-- NOTIFICATION STRIP -->
+  <div id="notif-strip">
+    <div class="strip-live-dot"></div>
+    <div class="strip-marquee-wrap">
+      <span class="strip-inner">
+        🚀 AI Judge v6 — Voice Input · Speech-to-Text · Text-to-Speech · Image Analysis in PPT · Suggestion Reports · Certificate Generation · Human vs AI · Role Dashboards &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        🚀 AI Judge v6 — Voice Input · Speech-to-Text · Text-to-Speech · Image Analysis in PPT · Suggestion Reports · Certificate Generation · Human vs AI · Role Dashboards
+      </span>
+    </div>
+    <button class="strip-close-btn" id="strip-close-btn"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+
+  <!-- SKELETON -->
+  <div id="skeleton-loader" class="skeleton-overlay">
+    <div class="skeleton-nav"></div>
+    <div class="skeleton-body">
+      <div class="skeleton-sidebar"><div class="sk-item"></div><div class="sk-item"></div><div class="sk-item"></div><div class="sk-item"></div><div class="sk-item"></div></div>
+      <div class="skeleton-content"><div class="sk-title"></div><div class="sk-block"></div><div class="sk-block short"></div></div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- CERTIFICATE MODAL -->
+  <div id="cert-modal" class="modal-overlay hidden">
+    <div class="modal-box cert-modal-box">
+      <button class="modal-close" id="cert-close"><i class="fa-solid fa-xmark"></i></button>
+      <div id="certificate" class="certificate">
+        <div class="cert-bg">
+          <div class="cert-orb cert-orb-1"></div>
+          <div class="cert-orb cert-orb-2"></div>
+        </div>
+        <div class="cert-content">
+          <div class="cert-logo"><i class="fa-solid fa-scale-balanced"></i></div>
+          <div class="cert-title-label">Certificate of Achievement</div>
+          <div class="cert-subtitle">AI Judge Evaluation Platform</div>
+          <div class="cert-divider-line"></div>
+          <div class="cert-presented">This certificate is proudly presented to</div>
+          <div class="cert-name" id="cert-team-name">Team Name</div>
+          <div class="cert-project" id="cert-project-title">Project Title</div>
+          <div class="cert-badge-row">
+            <div class="cert-badge winner"><i class="fa-solid fa-trophy"></i> <span id="cert-rank">1st Place Winner</span></div>
+            <div class="cert-score-badge"><span id="cert-score">95.00</span><small>/100</small></div>
+          </div>
+          <div class="cert-desc" id="cert-hackathon-name">Hackathon 2026</div>
+          <div class="cert-footer-row">
+            <div class="cert-sig"><div class="cert-sig-line"></div><span>AI Judge Panel</span></div>
+            <div class="cert-seal"><i class="fa-solid fa-certificate"></i></div>
+            <div class="cert-sig"><div class="cert-sig-line"></div><span id="cert-organizer">Organizer</span></div>
+          </div>
+          <div class="cert-date" id="cert-date">March 17, 2026</div>
+        </div>
+      </div>
+      <div class="cert-actions">
+        <button class="btn-glass" id="btn-download-cert"><i class="fa-solid fa-download"></i> Download PDF</button>
+        <button class="btn-glass" id="btn-print-cert"><i class="fa-solid fa-print"></i> Print</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav id="navbar" class="navbar">
+    <div class="nav-left">
+      <button id="sidebar-toggle" class="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+      <div class="brand">
+        <div class="brand-icon">⚖️</div>
+        <span class="brand-name">AI<span class="accent-b">Judge</span></span>
+      </div>
+    </div>
+    <div class="nav-center">
+      <div class="search-box" id="global-search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" placeholder="Search pages, features…" id="search-input" />
+        <kbd class="search-kbd">Ctrl+K</kbd>
+      </div>
+    </div>
+    <div class="nav-right">
+      <div class="live-clock" id="live-clock"></div>
+      <div class="role-badge-nav" id="role-badge-nav"></div>
+      <div class="notif-wrap">
+        <button class="icon-btn" id="notif-btn"><i class="fa-solid fa-bell"></i><span class="badge" id="notif-badge">3</span></button>
+        <div class="notif-dropdown hidden" id="notif-dropdown">
+          <div class="notif-header"><h4>Notifications</h4><button id="mark-all-read" class="mark-read">Mark all read</button></div>
+          <div class="notif-list" id="notif-list">
+            <div class="notif-item unread"><div class="notif-dot"></div><div class="notif-icon green"><i class="fa-solid fa-check-circle"></i></div><div class="notif-body"><p><strong>Evaluation complete</strong> — Smart City IoT scored 92/100</p><span class="notif-time">2 min ago</span></div></div>
+            <div class="notif-item unread"><div class="notif-dot"></div><div class="notif-icon blue"><i class="fa-solid fa-robot"></i></div><div class="notif-body"><p><strong>AI Assistant</strong> has new suggestions</p><span class="notif-time">15 min ago</span></div></div>
+            <div class="notif-item unread"><div class="notif-dot"></div><div class="notif-icon purple"><i class="fa-solid fa-trophy"></i></div><div class="notif-body"><p>You're in the <strong>Top 5%</strong> this month</p><span class="notif-time">1 hour ago</span></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="avatar-wrap" id="nav-avatar">
+        <div class="avatar" id="nav-avatar-text">?</div>
+        <span class="status-dot"></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar" class="sidebar">
+    <ul class="nav-menu" id="nav-menu">
+      <!-- Filled by JS based on role -->
+    </ul>
+    <div class="sidebar-footer">
+      <div class="sidebar-user" id="sidebar-user"></div>
+      <div class="sidebar-version">v4.0 — AI Judge Final</div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main id="main-content" class="main-content">
+
+    <!-- ════ PAGE: HOME ════ -->
+    <section id="page-home" class="page active">
+      <div class="hero-section">
+        <div class="hero-text">
+          <span class="hero-badge"><i class="fa-solid fa-sparkles"></i> AI-Powered Evaluation</span>
+          <h1>AI Judge — <span class="accent">Second Brain</span><br>for Human Evaluation</h1>
+          <p class="subtitle">Upload a file or describe your project. Our multi-layer AI panel scores, analyzes, and provides actionable expert feedback.</p>
+          <div class="hero-actions-row">
+            <button class="btn-evaluate" id="btn-start-evaluate" onclick="goPage('evaluate')">
+              <i class="fa-solid fa-bolt"></i> Start Evaluation
+            </button>
+            <button class="btn-glass-sm" onclick="goPage('hackathons')">
+              <i class="fa-solid fa-trophy"></i> Browse Hackathons
+            </button>
+          </div>
+        </div>
+        <div class="hero-graphic">
+          <svg viewBox="0 0 400 320" fill="none" xmlns="http://www.w3.org/2000/svg" class="hero-svg">
+            <circle cx="200" cy="160" r="130" fill="url(#hg1)" opacity="0.18"/>
+            <circle cx="150" cy="120" r="80" fill="url(#hg2)" opacity="0.12"/>
+            <rect x="100" y="60" width="200" height="200" rx="20" fill="rgba(99,102,241,0.08)" stroke="rgba(99,102,241,0.2)" stroke-width="1"/>
+            <rect x="125" y="95" width="100" height="8" rx="4" fill="rgba(99,102,241,0.3)"/>
+            <rect x="125" y="115" width="150" height="6" rx="3" fill="rgba(255,255,255,0.08)"/>
+            <rect x="125" y="131" width="130" height="6" rx="3" fill="rgba(255,255,255,0.06)"/>
+            <circle cx="270" cy="105" r="25" fill="rgba(99,102,241,0.12)" stroke="rgba(99,102,241,0.35)" stroke-width="2"/>
+            <text x="270" y="111" text-anchor="middle" fill="#6366f1" font-size="14" font-weight="700" font-family="Inter">95</text>
+            <rect x="130" y="195" width="16" height="40" rx="4" fill="rgba(99,102,241,0.25)"/>
+            <rect x="155" y="175" width="16" height="60" rx="4" fill="rgba(168,85,247,0.3)"/>
+            <rect x="180" y="185" width="16" height="50" rx="4" fill="rgba(34,211,238,0.25)"/>
+            <rect x="205" y="165" width="16" height="70" rx="4" fill="rgba(99,102,241,0.35)"/>
+            <rect x="230" y="190" width="16" height="45" rx="4" fill="rgba(168,85,247,0.2)"/>
+            <defs>
+              <radialGradient id="hg1"><stop stop-color="#6366f1"/><stop offset="1" stop-color="transparent"/></radialGradient>
+              <radialGradient id="hg2"><stop stop-color="#a855f7"/><stop offset="1" stop-color="transparent"/></radialGradient>
+            </defs>
+          </svg>
+        </div>
+      </div>
+      <div class="quick-stats" id="quick-stats">
+        <div class="qs-item"><div class="qs-icon blue"><i class="fa-solid fa-file-lines"></i></div><div class="qs-info"><span class="qs-num" id="stat-evals">0</span><span class="qs-label">Evaluations</span></div></div>
+        <div class="qs-item"><div class="qs-icon green"><i class="fa-solid fa-chart-simple"></i></div><div class="qs-info"><span class="qs-num" id="stat-avg">—</span><span class="qs-label">Avg Score</span></div></div>
+        <div class="qs-item"><div class="qs-icon purple"><i class="fa-solid fa-trophy"></i></div><div class="qs-info"><span class="qs-num" id="stat-best">—</span><span class="qs-label">Best Score</span></div></div>
+        <div class="qs-item"><div class="qs-icon orange"><i class="fa-solid fa-certificate"></i></div><div class="qs-info"><span class="qs-num" id="stat-certs">0</span><span class="qs-label">Certificates</span></div></div>
+      </div>
+      <div class="home-extra-grid">
+        <div>
+          <div class="recent-evals-section">
+            <h3><i class="fa-solid fa-clock-rotate-left" style="color:var(--lime)"></i> Recent Evaluations</h3>
+            <div id="home-recent-evals">
+              <div class="empty-state"><i class="fa-solid fa-robot"></i><p>No evaluations yet. Click <strong>Evaluate</strong> to start!</p></div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div class="action-card" onclick="goPage('evaluate')">
+            <div class="action-icon ai-lime"><i class="fa-solid fa-microphone"></i></div>
+            <h3>Voice Evaluate</h3>
+            <p>Speak your project description — speech-to-text powered</p>
+          </div>
+          <div class="action-card" onclick="goPage('evaluate')">
+            <div class="action-icon ai-cyan"><i class="fa-solid fa-file-image"></i></div>
+            <h3>Upload + Image Analysis</h3>
+            <p>Submit PPT/PDF — slides and images are analyzed by AI</p>
+          </div>
+          <div class="action-card" onclick="goPage('humanai')">
+            <div class="action-icon ai-violet"><i class="fa-solid fa-scale-balanced"></i></div>
+            <h3>Human vs AI</h3>
+            <p>Compare your judgment against the AI panel</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════ PAGE: EVALUATE ════ -->
+    <section id="page-evaluate" class="page">
+      <div class="page-header">
+        <h1><i class="fa-solid fa-clipboard-check"></i> AI <span class="accent">Evaluation</span></h1>
+        <p class="subtitle">Powered by NLP + LLM multi-judge panel + AIF360 bias detection</p>
+      </div>
+
+      <!-- Input Area -->
+      <div class="eval-input-grid">
+        <div class="card glass">
+          <div class="card-title"><i class="fa-solid fa-pen-to-square"></i> Project Details</div>
+          <div class="field-group">
+            <label>Team Name</label>
+            <input type="text" id="ev-team" placeholder="Your team name" class="inp" />
+          </div>
+          <div class="field-group">
+            <label>Project Title</label>
+            <input type="text" id="ev-title" placeholder="Project title" class="inp" />
+          </div>
+          <div class="field-group">
+            <label>GitHub Link <span class="optional">(optional)</span></label>
+            <input type="url" id="ev-github" placeholder="https://github.com/..." class="inp" />
+          </div>
+          <div class="field-group">
+            <label>Select Hackathon <span class="optional">(optional)</span></label>
+            <select id="ev-hackathon" class="inp">
+              <option value="">— None / Standalone Evaluation —</option>
+            </select>
+          </div>
+        </div>
+
+          <div class="card glass">
+          <div class="card-title"><i class="fa-solid fa-lightbulb"></i> Project Description</div>
+          <div class="voice-bar">
+            <button id="btn-voice" class="btn-voice" title="Click to record voice description"><i class="fa-solid fa-microphone"></i> <span id="voice-label">Voice Input</span></button>
+            <div class="voice-wave" id="voice-wave">
+              <div class="vwave-bar"></div><div class="vwave-bar"></div><div class="vwave-bar"></div><div class="vwave-bar"></div><div class="vwave-bar"></div>
+            </div>
+            <div class="voice-status" id="voice-status">Click mic to record your project description</div>
+            <button id="btn-tts-read" class="btn-tts" title="Read description aloud"><i class="fa-solid fa-volume-high"></i> Read Aloud</button>
+          </div>
+          <div class="textarea-wrap">
+            <textarea id="ev-desc" placeholder="Describe your project: what it does, tech used, problem it solves, who benefits…" rows="6" maxlength="3000" class="inp-ta"></textarea>
+          </div>
+          <div class="textarea-footer">
+            <span class="char-count"><span id="char-count">0</span>/3000</span>
+            <div class="template-row">
+              <button class="template-btn" data-t="startup">💡 Startup</button>
+              <button class="template-btn" data-t="research">🔬 Research</button>
+              <button class="template-btn" data-t="app">📱 App Idea</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card glass upload-section">
+        <div class="card-title"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Project Files <span class="optional">(PDF / DOCX / PPTX with images / MP4 / MP3 — optional)</span></div>
+        <div class="dropzone" id="dropzone">
+          <input type="file" id="file-input" hidden accept=".pdf,.docx,.pptx,.txt,.mp4,.mp3,.zip,.png,.jpg,.jpeg" />
+          <div id="dropzone-inner" class="dropzone-inner">
+            <i class="fa-solid fa-file-arrow-up drop-icon"></i>
+            <span class="drop-text">Drag & drop files here or <span class="link" id="browse-link">browse</span></span>
+            <span class="drop-hint">PDF, DOCX, PPTX (images extracted & analyzed), MP4, MP3, PNG, JPG — Max 100MB</span>
+          </div>
+          <div id="upload-success" class="upload-success hidden">
+            <i class="fa-solid fa-circle-check"></i>
+            <span id="file-name">file.pdf</span>
+            <span id="file-size" class="muted">2.1MB</span>
+            <button id="remove-file" class="remove-file"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+        </div>
+        <!-- Image extraction preview (PPT/PDF with images) -->
+        <div id="ocr-image-preview" class="ocr-preview hidden">
+          <div class="ocr-preview-title"><i class="fa-solid fa-image"></i> Extracted Slide Images — AI will analyze these visuals</div>
+          <div class="ocr-images-row" id="ocr-images-row"></div>
+          <div class="ocr-extracted-text" id="ocr-extracted-text">Extracting text from images…</div>
+        </div>
+      </div>
+
+      <!-- Run Button -->
+      <div class="eval-run-row">
+        <button class="btn-evaluate" id="btn-run-eval">
+          <i class="fa-solid fa-bolt"></i>
+          <span id="btn-run-text">Run AI Evaluation</span>
+          <div class="btn-loader-wrap hidden" id="eval-loader"><div class="spinner"></div></div>
+        </button>
+        <div class="eval-steps hidden" id="eval-steps">
+          <div class="step-item" id="step-1"><div class="step-dot"></div><span>Extracting content…</span></div>
+          <div class="step-item" id="step-2"><div class="step-dot"></div><span>NLP analysis…</span></div>
+          <div class="step-item" id="step-3"><div class="step-dot"></div><span>AI judging panel…</span></div>
+          <div class="step-item" id="step-4"><div class="step-dot"></div><span>Bias detection…</span></div>
+          <div class="step-item" id="step-5"><div class="step-dot"></div><span>Generating report…</span></div>
+        </div>
+      </div>
+
+      <!-- Results Dashboard -->
+      <div id="eval-results" class="eval-results hidden">
+        <div class="results-header">
+          <div class="results-badge"><i class="fa-solid fa-check-circle"></i> Evaluation Complete</div>
+          <div class="results-meta" id="results-meta"></div>
+        </div>
+
+        <div class="results-top-grid">
+          <div class="card glass final-score-card">
+            <div class="fs-label">Final Score</div>
+            <div class="fs-value" id="final-score-val">—</div>
+            <div class="fs-sub">/100</div>
+            <div class="fs-ring-wrap"><canvas id="score-ring" width="120" height="120"></canvas></div>
+          </div>
+          <div class="card glass badges-card">
+            <div class="badge-row"><div class="badge-item" id="badge-orig"><i class="fa-solid fa-fingerprint"></i><div><span class="badge-num" id="orig-val">—</span><span class="badge-lbl">Originality</span></div></div></div>
+            <div class="badge-row"><div class="badge-item" id="badge-risk"><i class="fa-solid fa-shield-halved"></i><div><span class="badge-num" id="risk-val">—</span><span class="badge-lbl">Risk Level</span></div></div></div>
+            <div class="badge-row"><div class="badge-item" id="badge-deploy"><i class="fa-solid fa-rocket"></i><div><span class="badge-num" id="deploy-val">—</span><span class="badge-lbl">Deployment</span></div></div></div>
+          </div>
+          <div class="card glass source-card">
+            <div class="card-title"><i class="fa-solid fa-layer-group"></i> Input Fusion</div>
+            <div id="source-info" class="source-info"></div>
+          </div>
+        </div>
+
+        <!-- TTS Read Results -->
+        <div class="tts-result-bar">
+          <i class="fa-solid fa-volume-high" style="color:var(--cyan)"></i>
+          <span>Have results read aloud:</span>
+          <button class="btn-tts" id="btn-tts-summary"><i class="fa-solid fa-play"></i> Summary</button>
+          <button class="btn-tts" id="btn-tts-strengths"><i class="fa-solid fa-play"></i> Strengths</button>
+          <button class="btn-tts" id="btn-tts-suggestions"><i class="fa-solid fa-play"></i> Suggestions</button>
+          <button class="btn-tts" id="btn-tts-stop" style="background:rgba(255,71,87,.1);border-color:rgba(255,71,87,.2);color:var(--red)"><i class="fa-solid fa-stop"></i> Stop</button>
+        </div>
+
+        <!-- Score Breakdown -->
+        <div class="card glass">
+          <div class="card-title"><i class="fa-solid fa-chart-bar"></i> Score Breakdown <span style="font-size:11px;color:var(--t3);font-weight:400;margin-left:8px">Innovation 25% · Technical 20% · Feasibility 20% · Impact 15% · MVP 10% · Clarity 10%</span></div>
+          <div id="score-breakdown" class="score-breakdown"></div>
+        </div>
+
+        <!-- SUGGESTION REPORT -->
+        <div class="suggestion-report" id="suggestion-report">
+          <div class="sr-header">
+            <div class="sr-icon">💡</div>
+            <div>
+              <div class="sr-title">Improvement Suggestion Report</div>
+              <div class="sr-sub">Where to focus to boost your score — specific actions per criterion</div>
+            </div>
+          </div>
+          <div class="sr-grid">
+            <div class="sr-card"><div class="sr-card-title lime">✅ Strengths</div><ul class="sr-list" id="sr-strengths"></ul></div>
+            <div class="sr-card"><div class="sr-card-title red">⚠ Areas to Improve</div><ul class="sr-list" id="sr-weaknesses"></ul></div>
+            <div class="sr-card"><div class="sr-card-title sky">🔧 Technical Recommendations</div><ul class="sr-list" id="sr-tech"></ul></div>
+            <div class="sr-card"><div class="sr-card-title violet">📈 Scaling Strategy</div><ul class="sr-list" id="sr-scale"></ul></div>
+          </div>
+          <div class="priority-box">
+            <div class="priority-title">🎯 Top Priority Actions — Work on These First</div>
+            <div id="priority-actions"></div>
+          </div>
+        </div>
+          <div class="card glass">
+            <div class="card-title green"><i class="fa-solid fa-circle-check"></i> Strengths</div>
+            <ul id="strengths-list" class="analysis-list green-list"></ul>
+          </div>
+          <div class="card glass">
+            <div class="card-title red"><i class="fa-solid fa-circle-exclamation"></i> Weaknesses</div>
+            <ul id="weaknesses-list" class="analysis-list red-list"></ul>
+          </div>
+          <div class="card glass">
+            <div class="card-title blue"><i class="fa-solid fa-lightbulb"></i> Technical Recommendations</div>
+            <ul id="tech-list" class="analysis-list blue-list"></ul>
+          </div>
+          <div class="card glass">
+            <div class="card-title purple"><i class="fa-solid fa-rocket"></i> Scaling Strategy</div>
+            <ul id="scale-list" class="analysis-list purple-list"></ul>
+          </div>
+        </div>
+
+        <!-- Bias Report -->
+        <div class="card glass" id="bias-section">
+          <div class="card-title orange"><i class="fa-solid fa-balance-scale"></i> AIF360 Fairness Report</div>
+          <div id="bias-report" class="bias-report"></div>
+        </div>
+
+        <!-- HITL Alert -->
+        <div class="hitl-alert hidden" id="hitl-alert">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <div><strong>Human-in-the-Loop Triggered</strong><p id="hitl-reason"></p></div>
+        </div>
+
+        <!-- Actions -->
+        <div class="results-actions">
+          <button class="btn-glass" id="btn-go-compare"><i class="fa-solid fa-people-arrows"></i> Compare with Human Judge</button>
+          <button class="btn-glass" id="btn-save-result"><i class="fa-solid fa-floppy-disk"></i> Save to History</button>
+          <button class="btn-glass" id="btn-issue-cert" style="display:none"><i class="fa-solid fa-certificate"></i> Issue Certificate</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════ PAGE: HACKATHONS ════ -->
+    <section id="page-hackathons" class="page">
+      <div class="page-header">
+        <h1><i class="fa-solid fa-trophy"></i> <span class="accent">Hackathons</span></h1>
+        <p class="subtitle">Browse active hackathons or create your own</p>
+      </div>
+      <div class="hackathon-toolbar">
+        <div class="search-sm"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="hackathon-search" placeholder="Search hackathons…" /></div>
+        <div class="filter-row">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="active">Active</button>
+          <button class="filter-btn" data-filter="upcoming">Upcoming</button>
+          <button class="filter-btn" data-filter="ended">Ended</button>
+        </div>
+        <button class="btn-evaluate" id="btn-create-hackathon" style="display:none"><i class="fa-solid fa-plus"></i> Create Hackathon</button>
+      </div>
+      <!-- Create Form (organizer only) -->
+      <div class="card glass hidden" id="create-hackathon-form">
+        <div class="card-title"><i class="fa-solid fa-plus-circle"></i> Create New Hackathon</div>
+        <div class="form-grid2">
+          <div class="field-group"><label>Hackathon Name</label><input type="text" id="hk-name" class="inp" placeholder="e.g. uHack 2026" /></div>
+          <div class="field-group"><label>Theme</label><input type="text" id="hk-theme" class="inp" placeholder="e.g. AI for Social Good" /></div>
+          <div class="field-group"><label>Start Date</label><input type="date" id="hk-start" class="inp" /></div>
+          <div class="field-group"><label>End Date</label><input type="date" id="hk-end" class="inp" /></div>
+          <div class="field-group"><label>Max Teams</label><input type="number" id="hk-maxteams" class="inp" placeholder="100" /></div>
+          <div class="field-group"><label>Prize Pool</label><input type="text" id="hk-prize" class="inp" placeholder="$5000" /></div>
+        </div>
+        <div class="field-group"><label>Description</label><textarea id="hk-desc" class="inp-ta" rows="3" placeholder="Describe this hackathon…"></textarea></div>
+        <div class="form-check-row">
+          <label class="check-label"><input type="checkbox" id="hk-public" checked /> <span>Make this hackathon public</span></label>
+        </div>
+        <button class="btn-evaluate" id="btn-submit-hackathon"><i class="fa-solid fa-plus"></i> Create Hackathon</button>
+      </div>
+      <div class="hackathon-grid" id="hackathon-grid">
+        <!-- Filled by JS -->
+      </div>
+    </section>
+
+    <!-- ════ PAGE: HUMAN vs AI ════ -->
+    <section id="page-humanai" class="page">
+      <div class="page-header">
+        <h1><i class="fa-solid fa-people-arrows"></i> Human <span class="accent">vs AI</span></h1>
+        <p class="subtitle">Compare your human judgment against the AI panel — see where each differs</p>
+      </div>
+      <div class="card glass">
+        <div class="card-title"><i class="fa-solid fa-gavel"></i> Enter Human Judge Scores</div>
+        <div id="human-score-grid" class="human-score-grid">
+          <div class="hs-row"><label>Innovation (1–10)</label><input type="range" min="1" max="10" value="7" class="hs-slider" id="hs-innovation" /><span class="hs-val">7</span></div>
+          <div class="hs-row"><label>Technical Complexity (1–10)</label><input type="range" min="1" max="10" value="7" class="hs-slider" id="hs-technical" /><span class="hs-val">7</span></div>
+          <div class="hs-row"><label>Feasibility & Scalability (1–10)</label><input type="range" min="1" max="10" value="7" class="hs-slider" id="hs-feasibility" /><span class="hs-val">7</span></div>
+          <div class="hs-row"><label>Impact & Social Good (1–10)</label><input type="range" min="1" max="10" value="7" class="hs-slider" id="hs-impact" /><span class="hs-val">7</span></div>
+          <div class="hs-row"><label>Functional MVP (1–10)</label><input type="range" min="1" max="10" value="7" class="hs-slider" id="hs-mvp" /><span class="hs-val">7</span></div>
+          <div class="hs-row"><label>Clarity & Documentation (1–10)</label><input type="range" min="1" max="10" value="7" class="hs-slider" id="hs-clarity" /><span class="hs-val">7</span></div>
+        </div>
+        <button class="btn-evaluate" id="btn-compare"><i class="fa-solid fa-people-arrows"></i> Analyze Human vs AI</button>
+      </div>
+      <div id="compare-results" class="compare-results hidden">
+        <div class="compare-grid" id="compare-grid"></div>
+        <div class="card glass">
+          <div class="card-title"><i class="fa-solid fa-brain"></i> Calibration Insight</div>
+          <p id="compare-insight" class="compare-insight"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════ PAGE: LEADERBOARD ════ -->
+    <section id="page-leaderboard" class="page">
+      <div class="page-header">
+        <h1><i class="fa-solid fa-ranking-star"></i> <span class="accent">Leaderboard</span></h1>
+        <p class="subtitle">Top teams ranked by AI evaluation score</p>
+      </div>
+      <div class="card glass">
+        <div class="lb-toolbar">
+          <select id="lb-hackathon-filter" class="inp-sm">
+            <option value="all">All Hackathons</option>
+          </select>
+          <button class="btn-glass" id="btn-refresh-lb"><i class="fa-solid fa-rotate"></i> Refresh</button>
+        </div>
+        <div id="leaderboard-table" class="leaderboard-table"></div>
+      </div>
+    </section>
+
+    <!-- ════ PAGE: ASSISTANT ════ -->
+    <section id="page-assistant" class="page">
+      <div class="page-header">
+        <h1><i class="fa-solid fa-robot"></i> AI <span class="accent">Assistant</span></h1>
+        <p class="subtitle">Ask anything about your project, evaluation, or hackathon strategy</p>
+      </div>
+      <div class="chat-container">
+        <div class="chat-messages" id="chat-messages">
+          <div class="chat-msg ai">
+            <div class="chat-avatar"><i class="fa-solid fa-robot"></i></div>
+            <div class="chat-bubble">
+              Hi! I'm your AI evaluation assistant. I can help you understand your scores, improve your project description, or answer questions about hackathon strategy.<br><br>I can also <strong>read my responses aloud</strong> — just click the speaker icon. What would you like to know?
+            </div>
+          </div>
+        </div>
+        <div class="chat-suggestions-panel">
+          <h4>Suggested Questions</h4>
+          <button class="sugg-btn">How can I improve my innovation score?</button>
+          <button class="sugg-btn">What makes a strong project description?</button>
+          <button class="sugg-btn">Explain the bias detection report</button>
+          <button class="sugg-btn">How is my final score calculated?</button>
+          <button class="sugg-btn">What tech stack would boost my score?</button>
+          <button class="sugg-btn">How to improve presentation clarity?</button>
+          <div class="chat-ctx-info" id="chat-ctx-info">
+            <strong>Project Context</strong>
+            No evaluation in context. Run one for project-specific advice.
+          </div>
+        </div>
+        <div class="chat-input-bar">
+          <button id="btn-voice-chat" class="voice-icon-btn" title="Voice input"><i class="fa-solid fa-microphone"></i></button>
+          <input type="text" id="chat-input" placeholder="Ask anything about your evaluation…" />
+          <button id="btn-tts-toggle" class="voice-icon-btn" title="Toggle text-to-speech for AI responses"><i class="fa-solid fa-volume-high"></i></button>
+          <button id="send-btn" class="send-btn"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════ PAGE: HISTORY ════ -->
+    <section id="page-history" class="page">
+      <div class="page-header">
+        <h1><i class="fa-solid fa-clock-rotate-left"></i> Evaluation <span class="accent">History</span></h1>
+        <p class="subtitle">All past evaluations and their results</p>
+      </div>
+      <div class="history-toolbar">
+        <div class="search-sm"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="history-search" placeholder="Search evaluations…" /></div>
+        <button class="btn-glass" id="btn-clear-history"><i class="fa-solid fa-trash"></i> Clear All</button>
+      </div>
+      <div id="history-list" class="history-list"></div>
+    </section>
+
+    <!-- ════ PAGE: PROFILE ════ -->
+    <section id="page-profile" class="page">
+      <div class="page-header">
+        <h1><i class="fa-solid fa-user"></i> My <span class="accent">Profile</span></h1>
+        <p class="subtitle">Your information, activity, and achievements</p>
+      </div>
+      <div class="profile-grid">
+        <div class="card glass profile-card-main">
+          <div class="profile-avatar-big" id="profile-avatar-big">?</div>
+          <div class="profile-name" id="profile-name">User</div>
+          <div class="profile-email" id="profile-email">user@example.com</div>
+          <div class="profile-role-badge" id="profile-role-badge">Student</div>
+          <div class="profile-stats-row">
+            <div class="ps-item"><span class="ps-num" id="ps-evals">0</span><span class="ps-lbl">Evaluations</span></div>
+            <div class="ps-item"><span class="ps-num" id="ps-avg">—</span><span class="ps-lbl">Avg Score</span></div>
+            <div class="ps-item"><span class="ps-num" id="ps-certs">0</span><span class="ps-lbl">Certificates</span></div>
+          </div>
+        </div>
+        <div class="profile-right-col">
+          <div class="card glass">
+            <div class="card-title"><i class="fa-solid fa-pen"></i> Edit Profile</div>
+            <div class="field-group"><label>Full Name</label><input type="text" id="prof-name" class="inp" /></div>
+            <div class="field-group"><label>Email</label><input type="email" id="prof-email" class="inp" /></div>
+            <div class="field-group"><label>Organisation / University</label><input type="text" id="prof-org" class="inp" placeholder="e.g. MIT, Google" /></div>
+            <div class="field-group"><label>Bio</label><textarea id="prof-bio" class="inp-ta" rows="3" placeholder="Tell us about yourself…"></textarea></div>
+            <button class="btn-evaluate" id="btn-save-profile"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
+          </div>
+          <div class="card glass">
+            <div class="card-title"><i class="fa-solid fa-certificate"></i> My Certificates</div>
+            <div id="profile-certs-list" class="certs-list"></div>
+          </div>
+          <div class="card glass">
+            <div class="card-title"><i class="fa-solid fa-chart-line"></i> Recent Activity</div>
+            <div id="profile-activity" class="profile-activity"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════ PAGE: JUDGE PANEL (judge role) ════ -->
+    <section id="page-judge-panel" class="page">
+      <div class="page-header">
+        <h1><i class="fa-solid fa-gavel"></i> Judge <span class="accent">Panel</span></h1>
+        <p class="subtitle">Review and score assigned submissions</p>
+      </div>
+      <div id="judge-queue" class="judge-queue">
+        <!-- Filled by JS -->
+      </div>
+    </section>
+
+    <!-- ════ PAGE: ADMIN (organizer role) ════ -->
+    <section id="page-admin" class="page">
+      <div class="page-header">
+        <h1><i class="fa-solid fa-crown"></i> Organizer <span class="accent">Dashboard</span></h1>
+        <p class="subtitle">Manage hackathons, teams, and issue certificates</p>
+      </div>
+      <div class="admin-stats-row">
+        <div class="card glass admin-stat"><i class="fa-solid fa-trophy"></i><div><span class="as-num" id="admin-hackathons">0</span><span class="as-lbl">Hackathons</span></div></div>
+        <div class="card glass admin-stat"><i class="fa-solid fa-users"></i><div><span class="as-num" id="admin-teams">0</span><span class="as-lbl">Teams</span></div></div>
+        <div class="card glass admin-stat"><i class="fa-solid fa-file-lines"></i><div><span class="as-num" id="admin-submissions">0</span><span class="as-lbl">Submissions</span></div></div>
+        <div class="card glass admin-stat"><i class="fa-solid fa-certificate"></i><div><span class="as-num" id="admin-certs">0</span><span class="as-lbl">Certificates</span></div></div>
+      </div>
+      <div class="card glass">
+        <div class="card-title"><i class="fa-solid fa-certificate"></i> Issue Certificates</div>
+        <p class="muted" style="margin-bottom:16px">Select a hackathon and issue winner certificates</p>
+        <div class="form-row-2">
+          <select id="cert-hackathon-select" class="inp"><option value="">Select Hackathon</option></select>
+          <button class="btn-evaluate" id="btn-issue-all-certs"><i class="fa-solid fa-certificate"></i> Issue Winner Certificates</button>
+        </div>
+        <div id="admin-cert-list" class="admin-cert-list"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="index.js"></script>
+</body>
+</html>
