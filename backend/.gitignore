@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+
+# Python cache & build
+__pycache__/
+backend/__pycache__/
+*.pyc
+
+# Uploads & temporary media
+backend/uploads/
+
+# Environment variables & secrets
+.env
+backend/.env
+frontend/.env
